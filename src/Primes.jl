@@ -3,7 +3,7 @@ __precompile__()
 module Primes
 
 using Compat
-using Compat.Iterators: repeated
+using Compat.Iterators: repeated, take
 
 if isdefined(Base,:isprime)
     import Base: isprime, primes, primesmask, factor
@@ -701,8 +701,7 @@ julia> nextprimes(10, 3)
  17
 ```
 """
-nextprimes{T<:Integer}(start::T, n::Integer) =
-    iterate(x->nextprime(add(x, 1)), nextprime(start), n)
+nextprimes{T<:Integer}(start::T, n::Integer) = collect(T, take(nextprimes(start), n))
 
 immutable PrevPrimes{T<:Integer}
     start::T
@@ -752,17 +751,6 @@ julia> prevprimes(10, 3)
  3
 ```
 """
-prevprimes{T<:Integer}(start::T, n::Integer) =
-    iterate(x->prevprime(add(x, -1)), prevprime(start), n)
-
-function iterate(f, x, n::Integer)
-    v = Vector{eltype(x)}(n)
-    n != 0 && (@inbounds v[1] = x)
-    @inbounds for i = 2:n
-        x = f(x)
-        v[i] = x
-    end
-    v
-end
+prevprimes{T<:Integer}(start::T, n::Integer) = collect(T, take(prevprimes(start, n)))
 
 end # module
