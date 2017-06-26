@@ -656,7 +656,7 @@ prime{T<:Integer}(::Type{T}, i::Integer) = i < 0 ? throw(DomainError()) : nextpr
 prime(i::Integer) = prime(Int, i)
 
 
-struct NextPrimes{T<:Integer}
+immutable NextPrimes{T<:Integer}
     start::T
 end
 
@@ -704,7 +704,7 @@ julia> nextprimes(10, 3)
 nextprimes{T<:Integer}(start::T, n::Integer) =
     iterate(x->nextprime(add(x, 1)), nextprime(start), n)
 
-struct PrevPrimes{T<:Integer}
+immutable PrevPrimes{T<:Integer}
     start::T
 end
 
